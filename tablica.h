@@ -11,94 +11,105 @@
 
 class new_arr
 {
-public:
-    int rows;
-    int colums;
-    int **arr;
+    public:
+
+        int **arr;  //Tablica dwuwymiarowa
+        /**
+        * Metoda zerująca teblicę
+        */
+        void zero_arr();
+
+        /**
+        * Metoda zapisująca tablicę w pamięci komputera
+        * @param new_rows [in] - żądana ilość wierszy
+        * @param new_colums [in] - żądana ilość kolumny
+        */
+        void open(const int new_rows, const int new_colums);
+
+        /**
+        * Metoda usunięcia tablicy z pamięci komputera
+        */
+        void close();
+
+        /**
+        * Metoda wypełniająca tablicę losowymi liczbami w zakresie 10
+        */
+        void fill();
+
+        /**
+        * Metoda wyświetlająca tablicę
+        */
+        void show();
+
+        /**
+        * Metoda zmniejszająca ilość kolumny
+        * @param new_colums [in] - żądana ilość kolumny
+        */
+        void lessx(const int new_colums);
+
+        /**
+        * Metoda zmniejszająca ilość wierszy
+        * @param new_rows [in] - żądana ilość wierszy
+        */
+        void lessy(const int new_rows);
+
+        /**
+        * Metoda zwiększająca ilość kolumny
+        * @param new_colums [in] - żądana ilość kolumny
+        */
+        void morex(const int new_colums);
+
+        /**
+        * Metoda zwiększająca ilość wierszy
+        * @param new_rows [in] - żądana ilość wierszy
+        */
+        void morey(const int new_rows);
+
+        /**
+        * Metoda zmieniająca rozmiaru tablicy
+        * @param new_rows [in] - żądana ilość wierszy
+        * @param new_colums [in] - żądana ilość kolumny
+        */
+        void edit_size(const int new_rows, const int new_colums);
+
+        /**
+        * Metoda wypełniająca komurkę
+        * @param x [in] - numer kolumny
+        * @param y [in] - numer wiersza
+        * @param value [in] - znaczenie komórki
+        */
+        void write(const int x, const int y, const int value);
+
+        /**
+        * Funkcja zwracająca znaczenie komórki
+        * @param x [in] - numer kolumny
+        * @param y [in] - numer wiersza
+        * @return - znaczenie komórki
+        */
+        int showPoint(const int x, const int y);
+
+        /**
+         * Funkcja zwracająca ilość kolumny w tablice
+         * @return - ilość kolumny
+         */
+        int getColums();
+
+        /**
+         * Funkcja zwracająca ilość wierszy w tablice
+         * @return - ilość wierszy
+         */
+        int getRows();
+
+
+
+
+
+    private:
+        int rows;   //Ilość wierszy
+        int colums; //Ilość kolumny
+
 
 };
-/**
- * Metoda zerująca tablicę
- * @param arr [in, out] - tablica dwuwymiarowa
- */
-void zero_arr(new_arr &arr);
 
-/**
- * Inicjalizacji tablicy w pamięci
- * @param arr [in, out] - tablica dwuwymiarowa
- * @param rows [in] - ilość wierszy
- * @param colums [in] - ilość kolumny
- */
-void open_arr(new_arr &arr, const int rows, const int colums);
-
-/**
- * Metoda usunięcia tablicy z pamięci
- * @param arr [in, out] - tablica dwuwymiarowa
- */
-void close_arr(new_arr &arr);
-// Функція яка заповнює таблицю випадковими числами
-void fillarr(new_arr& arr);
-
-
-/**
- * Metoda wyświetlający tablicę na ekranie
- * @param arr [in] - Tablica dwuwymiarowa
- */
-void showarr(new_arr &arr);
-
-
-/**
- * Metoda zmniejszania ilości kolum
- * @param arr [in, out] - tablica dwuwymiarowa
- * @param new_colums[in] - żądana ilość kolumny
- */
-void lessx(new_arr &arr, const int new_colums);
-
-/**
- * Metoda zmniejszania ilości wierszy
- * @param arr [in, out] - tablica dwuwymiarowa
- * @param new_rows [in] - żądana ilość wierszy
- */
-void lessy(new_arr &arr, const int new_rows);
-
-/**
- * Metoda zwiększania ilości kolumny
- * @param arr [in, out] - tablica dwuwymiarowa
- * @param new_colums [in] - żądana ilość kolumny
- */
-void morex(new_arr &arr, const int new_colums);
-
-/**
- * Metoda zwiększania ilości wierszy
- * @param arr [in, out] - tablica dwuwymiarowa
- * @param new_rows [in] - żądana ilość wierszy
- */
-void morey(new_arr &arr, const int new_rows);
-
-/**
- * Metoda zmiany rozmiaru tablicy
- * @param arr [in, out] - tablica dwuwymiarowa
- * @param new_rows [in] - żądana ilość wierszy
- * @param new_colums [in] - żądana ilość kolumny
- */
-void edit_sizearr( new_arr &arr, const int new_rows, const int new_colums);
-
-/**
- * Metoda zapisu dannych do komórki
- * @param arr [in, out] - tablica dwuwymiarowa
- * @param x [in] - odcięta komórki
- * @param y [in] - rzędowa komórki
- * @param value [in] - znaczenie komórki
- */
-void write_arr(new_arr &arr, int x, int y, int value);
-
-/**
- * Funkcja wyświetlająca znaczenie komórki
- * @param arr [in, out] - tablica dwuwymiarowa
- * @param x [in] - odcięta komórki
- * @param y [in] - rzędowa komórki
- * @return - znaczenie komórki
- */
-int showPointArr(new_arr &arr, const int x, const int y);
 #endif /* tablica_h */
 

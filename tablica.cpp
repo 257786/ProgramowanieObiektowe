@@ -6,67 +6,56 @@
 //
 
 #include <iostream>
+#include "tablica.h"
 using namespace std;
 
-//Klasa tablicy
-class new_arr
-{
-    public:
-        int rows;
-        int colums;
-        int **arr;
 
-};
-
-//Metod, który zeruje tablicę
-void zero_arr(new_arr &arr)
+void new_arr::zero_arr()
 {
-    for(int i = 0; i < arr.rows; i++)
-        for(int j = 0; j < arr.colums; j++)
-            arr.arr[i][j] = 0;
+    for(int i = 0; i < rows; i++)
+        for(int j = 0; j < colums; j++)
+            arr[i][j] = 0;
 }
-
-//Metod inicializujący tablicę
-void open_arr(new_arr &arr, const int rows, const int colums)
+void new_arr::open(const int new_rows, const int new_colums)
 {
-    arr.rows = rows;
-    arr.colums = colums;
-    arr.arr = new int*[rows];
+    rows = new_rows;
+    colums = new_colums;
+    arr = new int*[rows];
     for(int i = 0 ; i < rows; i++)
     {
-        arr.arr[i] = new int[colums];
+        arr[i] = new int[colums];
     }
-    zero_arr(arr);
+    zero_arr();
 }
 
 //Metod, który usuwa tablicę z pamięci operatywnej
-void close_arr(new_arr &arr)
+void new_arr::close()
 {
-    for(int i = 0; i < arr.rows; i++)
+    for(int i = 0; i < rows; i++)
     {
-        delete[] arr.arr[i];
+        delete[] arr[i];
     }
-    delete[] arr.arr;
+    delete[] arr;
 }
 
 // Metod, który wypęwnia tablicę losowymi liczbami
-void fillarr(new_arr &arr)
+void new_arr::fill()
 {
-    for (int i = 0; i < arr.rows; i++)
-        for (int j = 0; j < arr.colums; j++)
-            arr.arr[i][j] = rand() % 10;
+    for (int i = 0; i < rows; i++)
+        for (int j = 0; j < colums; j++)
+            arr[i][j] = rand() % 10;
 }
 
 
 //Metod, który wyświetla tablicę na ekran
-void showarr(new_arr &arr)
+void new_arr::show()
 {
     cout << endl;
-    for (int i = 0; i < arr.rows; i++)
+    for (int i = 0; i < rows; i++)
     {
-        for(int j = 0; j < arr.colums; j++)
+        for(int j = 0; j < colums; j++)
         {
-            cout << arr.arr[i][j] << "\t";
+            cout << arr[i][j] << "\t";
         }
         cout << endl;
     }
@@ -75,85 +64,81 @@ void showarr(new_arr &arr)
 
 // функція зменшення таблиці по осі х
 //Metod zmniejszenia ilośći kolum
-void lessx(new_arr &arr, const int new_colums)
+void new_arr::lessx(const int new_colums)
 {
     //  Ініціалізуємо додаткову таблицю
 
     new_arr new_arr;
-    open_arr(new_arr, arr.rows, new_colums);
+    new_arr.open(rows, new_colums);
     //Переносимо дані зі старої таблиці на нову
-    for (int i = 0; i < arr.rows; i++)
+    for (int i = 0; i < rows; i++)
         for (int j = 0; j < new_colums; j++)
-            new_arr.arr[i][j] = arr.arr[i][j];
+            new_arr.arr[i][j] = arr[i][j];
     
     
         //Очищуємо першу таблицю
 
-    close_arr(arr);
+    close();
 
-    for (int i = 0; i < arr.rows; i++)
-        arr.arr[i] = new_arr.arr[i];
-    arr.arr = new_arr.arr;
+    for (int i = 0; i < rows; i++)
+        arr[i] = new_arr.arr[i];
+    arr = new_arr.arr;
     
-    arr.colums = new_colums;
+    colums = new_colums;
 }
 
 
 //Функція зменшення таблиці по осі y
 //Metod zmniejszenia ilości wierszy
-void lessy(new_arr &arr, const int new_rows)
+void new_arr::lessy(const int new_rows)
 {
     //  Ініціалізуємо додаткову таблицю
 
     new_arr new_arr;
-    open_arr(new_arr, new_rows, arr.colums);
+    new_arr.open(new_rows, colums);
     //Переносимо дані зі старої таблиці на нову
     for (int i = 0; i < new_rows; i++)
-        for (int j = 0; j < arr.colums; j++)
-            new_arr.arr[i][j] = arr.arr[i][j];
-    
-    //showarr(new_arr, rows, new_colums);
-    
-    
+        for (int j = 0; j < colums; j++)
+            new_arr.arr[i][j] = arr[i][j];
     
     //Очищуємо першу таблицю
 
-    close_arr(arr);
+    close();
 
     for (int i = 0; i < new_rows; i++)
-        arr.arr[i] = new_arr.arr[i];
-    arr.arr = new_arr.arr;
+        arr[i] = new_arr.arr[i];
+    arr = new_arr.arr;
     
-    arr.rows = new_rows;
+    rows = new_rows;
 }
 
 //------
 
 // Функція збільшення таблиці по осі x
 //Metod, który zwiększa ilość kolum
-void morex(new_arr &arr, const int new_colums)
+void new_arr::morex(const int new_colums)
 {
     
     //  Ініціалізуємо додаткову таблицю
 
     new_arr new_arr;
-    open_arr(new_arr, arr.rows, new_colums);
+    new_arr.open(rows, new_colums);
     //Переносимо дані зі старої таблиці на нову
-    for (int i = 0; i < arr.rows; i++)
-        for (int j = 0; j < arr.colums; j++)
-            new_arr.arr[i][j] = arr.arr[i][j];
+    for (int i = 0; i < rows; i++)
+        for (int j = 0; j < colums; j++)
+            new_arr.arr[i][j] = arr[i][j];
     //Обнуляємо новостворенні комірки
-    zero_arr(new_arr);
+
     
     //Очищуємо першу таблицю
-    close_arr(arr);
+    close();
     
-    for (int i = 0; i < arr.rows; i++)
-        arr.arr[i] = new_arr.arr[i];
-    arr.arr = new_arr.arr;
+    for (int i = 0; i < rows; i++)
+        arr[i] = new_arr.arr[i];
+    arr = new_arr.arr;
     
     
-    arr.colums = new_colums;
+    colums = new_colums;
     
     
 }
@@ -161,55 +146,62 @@ void morex(new_arr &arr, const int new_colums)
 
 //Функція збільшення по осі y
 //Metod, który zwiększa ilość wierszy
-void morey(new_arr &arr, const int new_rows)
+void new_arr::morey(const int new_rows)
 {
 
     new_arr new_arr;
-    open_arr(new_arr, new_rows, arr.colums);
+    new_arr.open(new_rows, colums);
     //Переносимо дані зі старої таблиці на нову
-    for (int i = 0; i < arr.rows; i++)
-        for (int j = 0; j < arr.colums; j++)
-            new_arr.arr[i][j] = arr.arr[i][j];
-    
-    //Обнуляємо новоутворенні комірки
-    zero_arr(new_arr);
-    
+    for (int i = 0; i < rows; i++)
+        for (int j = 0; j < colums; j++)
+            new_arr.arr[i][j] = arr[i][j];
+
     //Очищуємо першу таблицю
-    close_arr(arr);
+    close();
     
-    for (int i = 0; i < arr.rows; i++)
-        arr.arr[i] = new_arr.arr[i];
-    arr.arr = new_arr.arr;
+    for (int i = 0; i < rows; i++)
+        arr[i] = new_arr.arr[i];
+    arr = new_arr.arr;
     
-    arr.rows = new_rows;
+    rows = new_rows;
 }
 
 //Функція для зміни розміру таблиці
 //Metod, który zmiana rozmiar tablicy
-void edit_sizearr( new_arr &arr, const int new_rows, const int new_colums)
+void new_arr::edit_size(const int new_rows, const int new_colums)
 {
-    if (new_rows <= arr.rows)
-        lessy(arr,new_rows);
+    if (new_rows <= rows)
+        lessy(new_rows);
     else
-        morey(arr, new_rows);
-    if (new_colums <= arr.colums)
-        lessx(arr, new_colums);
+        morey(new_rows);
+    if (new_colums <= colums)
+        lessx(new_colums);
     else
-        morex(arr, new_colums);
+        morex(new_colums);
 }
 
 
 
 //Фунція для запису певного значення в певну комірку
 //Metod, który zapisuje znaczenie do komórki
-void write_arr(new_arr &arr, int x, int y, int value)
+void new_arr::write(const int x, const int y,const int value)
 {
-    arr.arr[y-1][x-1] = value;
+    arr[y-1][x-1] = value;
 }
 
 //Funkcja, która wyświetla znaczenie komórki
-int showPointArr(new_arr &arr, const int x, const int y)
+int new_arr::showPoint(const int x, const int y)
 {
-    return arr.arr[y][x];
+    return arr[y][x];
 }
+
+int new_arr::getColums()
+{
+    return colums;
+}
+int new_arr::getRows()
+{
+    return rows;
+}
+
 

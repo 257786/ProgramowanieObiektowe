@@ -35,7 +35,7 @@ void sizePage(new_arr &arr)
     cout << "Proszę podać żądaną wysokość tablicy:" <<
         endl;
     cin >> newrows;
-    edit_sizearr(arr, newrows, newcolums);
+    arr.edit_size(newrows, newcolums);
 }
 
 //Strona do zapisu dannych do komórki
@@ -48,23 +48,23 @@ void writePage(new_arr &arr)
     {
         cout << "Proszę podać poziomą współrzędną komórki" << endl;
         cin >> x;
-        if (x > arr.colums)
+        if (x > arr.getColums())
             cout << "Niema takiej poziomej współrzędnej!!" << endl;
     }
-    while(x > arr.colums);
+    while(x > arr.getColums());
 
     do
     {
         cout << "Proszę podać pionową współrzędną komórki"
              << endl;
         cin >> y;
-        if(y > arr.rows)
+        if(y > arr.getRows())
             cout << "Niema takiej pionowej współrzędnej!!" << endl;
     }
-    while(y > arr.rows);
+    while(y > arr.getRows());
     cout << "Proszę wypęłnić komórkę" << endl;
     cin >> val;
-    write_arr(arr, x, y, val);
+    arr.write(x, y, val);
 }
 
 //Strona do zapisu tablicy w pliku

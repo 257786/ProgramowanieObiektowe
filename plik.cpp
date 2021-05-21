@@ -40,9 +40,9 @@ void open_in(inPlik &plik)
 
 void writeFile(new_arr &arr, outPlik &plik)
 {
-    for (int i = 0; i < arr.rows; i++)
+    for (int i = 0; i < arr.getRows(); i++)
     {
-        for(int j = 0; j < arr.colums; j++)
+        for(int j = 0; j < arr.getColums(); j++)
         {
             plik.plik << arr.arr[i][j] << "\t";
         }
@@ -141,15 +141,15 @@ int showPointFile(inPlik &plik, const int x, const int y)
 //Metod, który dopasowuję rozmiar tablicy dynamicznej do rozmiaru tablicy w pliku
 void sizeArrFile(new_arr &arr, inPlik &plik)
 {
-    edit_sizearr(arr,  fileRows(plik), fileColums(plik));
+    arr.edit_size(fileRows(plik), fileColums(plik));
 }
 
 //Metod, który importuję tablicę z pliku
 void importArr(new_arr &arr, inPlik &plik)
 {
     sizeArrFile(arr, plik);
-    for(int i = 0; i < arr.rows; i++)
-        for(int j = 0; j < arr.colums; j++)
+    for(int i = 0; i < arr.getRows(); i++)
+        for(int j = 0; j < arr.getColums(); j++)
             arr.arr[i][j] = showPointFile(plik, j+1, i+1);
 
 }

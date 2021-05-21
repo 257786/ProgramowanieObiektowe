@@ -16,7 +16,7 @@ int main(/*int argc, const char * argv[]*/)
 {
     //Utworzenie tablicy
     new_arr arr;
-    open_arr(arr, 10, 10);
+    arr.open(10,10);
 
     //Tworzenie plików wyjściowych i wejściowych
     outPlik plikOut;
@@ -30,7 +30,7 @@ int main(/*int argc, const char * argv[]*/)
 
         switch (choice) {
             case 1:
-                showarr(arr);
+                arr.show();
                 break;
             case 2:
                 sizePage(arr);
@@ -51,6 +51,6 @@ int main(/*int argc, const char * argv[]*/)
         }
     }
 
-    close_arr(arr);
+    arr.close();
     return 0;
 }
