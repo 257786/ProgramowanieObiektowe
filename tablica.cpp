@@ -10,6 +10,44 @@
 using namespace std;
 
 
+
+
+void sheet::open(const int new_rows, const int new_colums, const char new_type)
+{
+    rows = new_rows;
+    colums = new_colums;
+    arr = new point*[rows];
+    type = new_type;
+    for(int i = 0; i < rows; i++)
+    {
+        switch(new_type)
+        {
+            case 0:
+                arr[i] = new pointInt[colums];
+                break;
+
+            case 1:
+                arr[i] = new pointDbl[colums];
+                break;
+
+            case 2:
+                arr[i] = new pointStr[colums];
+                break;
+        }
+    }
+
+}
+
+void sheet::close()
+{
+    for(int i = 0; i < rows; i++)
+    {
+        delete[] arr[i];
+    }
+    delete[] arr;
+}
+
+
 void new_arr::zero_arr()
 {
     for(int i = 0; i < rows; i++)
@@ -204,7 +242,4 @@ int new_arr::getRows()
     return rows;
 }
 
-void point::set_type(char type)
-{
-    type_point = type;
-}
+
