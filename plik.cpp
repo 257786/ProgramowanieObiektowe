@@ -44,7 +44,7 @@ void writeFile(new_arr &arr, outPlik &plik)
     {
         for(int j = 0; j < arr.getColums(); j++)
         {
-            plik.plik << arr.arr[i][j] << "\t";
+            plik.plik << arr.showPoint(j, i) << "\t";
         }
         plik.plik << endl;
     }
@@ -148,8 +148,16 @@ void sizeArrFile(new_arr &arr, inPlik &plik)
 void importArr(new_arr &arr, inPlik &plik)
 {
     sizeArrFile(arr, plik);
-    for(int i = 0; i < arr.getRows(); i++)
-        for(int j = 0; j < arr.getColums(); j++)
-            arr.arr[i][j] = showPointFile(plik, j+1, i+1);
+    for(int i = 1; i <= arr.getRows(); i++)
+    {
+        for(int j = 1; j <= arr.getColums(); j++)
+        {
+            //arr.arr_int[i][j] = showPointFile(plik, j+1, i+1);
+
+            arr.write(j, i , showPointFile(plik, j+1, i+1));
+        }
+
+    }
+
 
 }

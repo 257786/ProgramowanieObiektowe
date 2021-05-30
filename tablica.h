@@ -8,12 +8,13 @@
 #ifndef tablica_h
 #define tablica_h
 
+using namespace std;
 
 class new_arr
 {
     public:
 
-        int **arr;  //Tablica dwuwymiarowa
+
         /**
         * Metoda zerująca teblicę
         */
@@ -105,11 +106,25 @@ class new_arr
 
 
     private:
-        int rows;   //Ilość wierszy
-        int colums; //Ilość kolumny
+        int **arr_int;      //Tablica dwuwymiarowa int
+        string **arr_str;   //Tablica dwuwymiarowa string
+        double **arr_dbl;   //Tablica dwuwymiarowa double
+        char type;          //Typ tablicy
+        int rows;           //Ilość wierszy
+        int colums;         //Ilość kolumny
 
 
 };
 
+class point
+{
+    public:
+    void set_type(char type);
+    private:
+        char type_point;
+        string var_str;
+        int var_int;
+        double var_dbl;
+};
 #endif /* tablica_h */
 

@@ -14,16 +14,16 @@ void new_arr::zero_arr()
 {
     for(int i = 0; i < rows; i++)
         for(int j = 0; j < colums; j++)
-            arr[i][j] = 0;
+            arr_int[i][j] = 0;
 }
 void new_arr::open(const int new_rows, const int new_colums)
 {
     rows = new_rows;
     colums = new_colums;
-    arr = new int*[rows];
+    arr_int = new int*[rows];
     for(int i = 0 ; i < rows; i++)
     {
-        arr[i] = new int[colums];
+        arr_int[i] = new int[colums];
     }
     zero_arr();
 }
@@ -33,9 +33,9 @@ void new_arr::close()
 {
     for(int i = 0; i < rows; i++)
     {
-        delete[] arr[i];
+        delete[] arr_int[i];
     }
-    delete[] arr;
+    delete[] arr_int;
 }
 
 // Metod, który wypęwnia tablicę losowymi liczbami
@@ -43,7 +43,7 @@ void new_arr::fill()
 {
     for (int i = 0; i < rows; i++)
         for (int j = 0; j < colums; j++)
-            arr[i][j] = rand() % 10;
+            arr_int[i][j] = rand() % 10;
 }
 
 
@@ -55,7 +55,7 @@ void new_arr::show()
     {
         for(int j = 0; j < colums; j++)
         {
-            cout << arr[i][j] << "\t";
+            cout << arr_int[i][j] << "\t";
         }
         cout << endl;
     }
@@ -73,7 +73,7 @@ void new_arr::lessx(const int new_colums)
     //Переносимо дані зі старої таблиці на нову
     for (int i = 0; i < rows; i++)
         for (int j = 0; j < new_colums; j++)
-            new_arr.arr[i][j] = arr[i][j];
+            new_arr.arr_int[i][j] = arr_int[i][j];
     
     
         //Очищуємо першу таблицю
@@ -81,8 +81,8 @@ void new_arr::lessx(const int new_colums)
     close();
 
     for (int i = 0; i < rows; i++)
-        arr[i] = new_arr.arr[i];
-    arr = new_arr.arr;
+        arr_int[i] = new_arr.arr_int[i];
+    arr_int = new_arr.arr_int;
     
     colums = new_colums;
 }
@@ -99,15 +99,15 @@ void new_arr::lessy(const int new_rows)
     //Переносимо дані зі старої таблиці на нову
     for (int i = 0; i < new_rows; i++)
         for (int j = 0; j < colums; j++)
-            new_arr.arr[i][j] = arr[i][j];
+            new_arr.arr_int[i][j] = arr_int[i][j];
     
     //Очищуємо першу таблицю
 
     close();
 
     for (int i = 0; i < new_rows; i++)
-        arr[i] = new_arr.arr[i];
-    arr = new_arr.arr;
+        arr_int[i] = new_arr.arr_int[i];
+    arr_int = new_arr.arr_int;
     
     rows = new_rows;
 }
@@ -126,7 +126,7 @@ void new_arr::morex(const int new_colums)
     //Переносимо дані зі старої таблиці на нову
     for (int i = 0; i < rows; i++)
         for (int j = 0; j < colums; j++)
-            new_arr.arr[i][j] = arr[i][j];
+            new_arr.arr_int[i][j] = arr_int[i][j];
     //Обнуляємо новостворенні комірки
 
     
@@ -134,8 +134,8 @@ void new_arr::morex(const int new_colums)
     close();
     
     for (int i = 0; i < rows; i++)
-        arr[i] = new_arr.arr[i];
-    arr = new_arr.arr;
+        arr_int[i] = new_arr.arr_int[i];
+    arr_int = new_arr.arr_int;
     
     
     colums = new_colums;
@@ -154,14 +154,14 @@ void new_arr::morey(const int new_rows)
     //Переносимо дані зі старої таблиці на нову
     for (int i = 0; i < rows; i++)
         for (int j = 0; j < colums; j++)
-            new_arr.arr[i][j] = arr[i][j];
+            new_arr.arr_int[i][j] = arr_int[i][j];
 
     //Очищуємо першу таблицю
     close();
     
     for (int i = 0; i < rows; i++)
-        arr[i] = new_arr.arr[i];
-    arr = new_arr.arr;
+        arr_int[i] = new_arr.arr_int[i];
+    arr_int = new_arr.arr_int;
     
     rows = new_rows;
 }
@@ -186,13 +186,13 @@ void new_arr::edit_size(const int new_rows, const int new_colums)
 //Metod, który zapisuje znaczenie do komórki
 void new_arr::write(const int x, const int y,const int value)
 {
-    arr[y-1][x-1] = value;
+    arr_int[y-1][x-1] = value;
 }
 
 //Funkcja, która wyświetla znaczenie komórki
 int new_arr::showPoint(const int x, const int y)
 {
-    return arr[y][x];
+    return arr_int[y][x];
 }
 
 int new_arr::getColums()
@@ -204,4 +204,7 @@ int new_arr::getRows()
     return rows;
 }
 
-
+void point::set_type(char type)
+{
+    type_point = type;
+}
