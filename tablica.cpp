@@ -6,36 +6,90 @@
 //
 
 #include <iostream>
+#include <sstream>
 #include "tablica.h"
+#include "colors.h"
 using namespace std;
 
 
-
-
-void sheet::open(const int new_rows, const int new_colums, const char new_type)
+int point::get_type()
 {
-    rows = new_rows;
-    colums = new_colums;
-    arr = new point*[rows];
-    type = new_type;
+    return type;
+}
+void pointInt::write(string inf)
+{
+    stringstream str;
+    str << inf;
+    str >> value;
+}
+
+void pointDbl::write(string inf)
+{
+    stringstream str;
+    str << inf;
+    str >> value;
+}
+
+void pointStr::write(string inf)
+{
+    value = inf;
+}
+string pointInt::read()
+{
+    stringstream str;
+    string s;
+    str << value;
+    str >> s;
+    return s;
+}
+
+string pointDbl::read()
+{
+    stringstream str;
+    string s;
+    str << value;
+    str >> s;
+    return s;
+}
+
+string pointStr::read()
+{
+    return value;
+}
+
+void sheet::zero()
+{
+
+    for(int i = 0; i < rows; i++)
+        for(int j = 0; j < colums; j++)
+           arr[i][j]->write("0");
+
+}
+
+void sheet::open(const int rows, const int colums, const char type)
+{
+    this->rows = rows;
+    this->colums = colums;
+    arr = new point**[rows];
     for(int i = 0; i < rows; i++)
     {
-        switch(new_type)
+        arr[i] = new point*[colums];
+        for(int j = 0; j < colums; j++)
         {
-            case 0:
-                arr[i] = new pointInt[colums];
-                break;
-
-            case 1:
-                arr[i] = new pointDbl[colums];
-                break;
-
-            case 2:
-                arr[i] = new pointStr[colums];
-                break;
+            switch (type)
+            {
+                case 0:
+                    arr[i][j] = new pointInt;
+                    break;
+                case 1:
+                    arr[i][j] = new pointStr;
+                    break;
+                case 2:
+                    arr[i][j] = new pointDbl;
+            }
         }
     }
-
+    zero();
 }
 
 void sheet::close()
@@ -46,6 +100,179 @@ void sheet::close()
     }
     delete[] arr;
 }
+
+
+void sheet::show()
+{
+    cout << endl;
+    for (int i = 0; i < rows; i++)
+    {
+        for(int j = 0; j < colums; j++)
+        {
+            switch(arr[i][j]->get_type())
+            {
+                case 0:
+                    cout << green << arr[i][j]->read() << reset << "\t";
+                    break;
+                case 1:
+                    cout << magenta << arr[i][j]->read() << reset << "\t";
+                    break;
+                case 2:
+                    cout << cyan << arr[i][j]->read() << reset << "\t";
+            }
+
+        }
+        cout << endl;
+    }
+}
+
+
+
+void sheet::changePointType(const int type, const int x, const int y)
+{
+    delete[] arr[y][x];
+    switch (type)
+    {
+        case 0:
+            arr[y][x] = new pointInt;
+            break;
+        case 1:
+            arr[y][x] = new pointStr;
+            break;
+        case 2:
+            arr[y][x] = new pointDbl;
+            break;
+    }
+}
+
+void sheet::changeColumType(const int type, const int x)
+{
+    for(int y = 0; y < getRows(); y++)
+    {
+        changePointType(type, x, y);
+    }
+}
+
+void sheet::changeRowType(const int type, const int y)
+{
+    for(int x = 0; x < getColums(); x++)
+    {
+        changePointType(type, x, y);
+    }
+}
+
+void sheet::change_type(const int type)
+{
+    for(int i = 0; i < getRows(); i++)
+    {
+        for(int j = 0; j < getColums(); j++)
+        {
+            changePointType(type, j, i);
+        }
+    }
+}
+
+
+void sheet::move(sheet &new_sheet, const int new_rows, const int new_colums)
+{
+
+    for(int i = 0; i < new_rows; i++)
+        for(int j = 0; i < new_colums; j++)
+            new_sheet.writePoint(j+1, i+1, showPoint(j, i));
+
+
+   /* for(int i = 0; i < new_rows; i++)
+        for(int j = 0; j < new_colums; j++)
+            new_sheet.arr[i][j] = arr[i][j];*/
+    close();
+    for (int i = 0; i < rows; i++)
+        arr[i] = new_sheet.arr[i];
+
+    arr = new_sheet.arr;
+    rows = new_rows;
+    colums = new_colums;
+}
+
+
+void sheet::lessx(const int new_colums)
+{
+    //  Ініціалізуємо додаткову таблицю
+
+    sheet new_sheet;
+    new_sheet.open(rows, new_colums, 1);
+    //Переносимо дані зі старої таблиці на нову
+    move(new_sheet, rows, new_colums);
+
+}
+
+void sheet::lessy(const int new_rows)
+{
+    //  Ініціалізуємо додаткову таблицю
+
+    sheet new_sheet;
+    new_sheet.open(new_rows, colums, 1);
+    move(new_sheet, new_rows, colums);
+
+}
+
+
+void sheet::morex(const int new_colums)
+{
+
+    //  Ініціалізуємо додаткову таблицю
+
+    sheet new_sheet;
+    new_sheet.open(rows, new_colums, 1);
+    move(new_sheet, rows, colums);
+
+
+}
+
+void sheet::morey(const int new_rows)
+{
+
+    sheet new_sheet;
+    new_sheet.open(new_rows, colums, 1);
+    //Переносимо дані зі старої таблиці на нову
+    move(new_sheet, rows, colums);
+
+}
+
+void sheet::edit_size(const int new_rows, const int new_colums)
+{
+    if (new_rows <= rows)
+        lessy(new_rows);
+    else
+        morey(new_rows);
+
+    if (new_colums <= colums)
+        lessx(new_colums);
+    else
+        morex(new_colums);
+}
+
+
+void sheet::writePoint(const int x, const int y,const string value)
+{
+    arr[y-1][x-1]->write(value);
+}
+
+//Funkcja, która wyświetla znaczenie komórki
+string sheet::showPoint(const int x, const int y)
+{
+    return arr[y][x]->read();
+}
+
+int sheet::getColums()
+{
+    return colums;
+}
+int sheet::getRows()
+{
+    return rows;
+}
+///////////////////////////////////////////////////////////////////////////
+
 
 
 void new_arr::zero_arr()

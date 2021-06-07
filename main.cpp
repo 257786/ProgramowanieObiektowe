@@ -10,13 +10,15 @@
 #include "tablica.h"
 #include "menu.h"
 #include "plik.h"
-
+#include "colors.h"
 using namespace std;
 int main(/*int argc, const char * argv[]*/)
 {
     //Utworzenie tablicy
-    new_arr arr;
-    arr.open(10,10);
+    sheet arr;
+
+
+
 
     //Tworzenie plików wyjściowych i wejściowych
     outPlik plikOut;
@@ -39,9 +41,12 @@ int main(/*int argc, const char * argv[]*/)
                 writePage(arr);
                 break;
             case 4:
-                writeFilePage(arr,  plikOut);
+                typePage(arr);
                 break;
             case 5:
+                writeFilePage(arr,  plikOut);
+                break;
+            case 6:
                 openFilePage(plikIn, arr);
                 break;
             case 0: break;
