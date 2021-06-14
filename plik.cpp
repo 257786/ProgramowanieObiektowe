@@ -6,121 +6,132 @@
 //
 
 #include <iostream>
-#include <fstream>
-#include <stdlib.h>
+#include "plik.h"
+
 #include "tablica.h"
 using namespace std;
 
-class outPlik
-{
-    public:
-        ofstream plik;
-        string path;
-};
 
-class inPlik
-{
-    public:
-        ifstream plik;
-        string path;
-};
 
-void open_out(outPlik &plik)
+outPlik::outPlik(string path)
 {
-    plik.plik.open(plik.path);
+    this->path = path;
+    open();
 }
 
-void open_in(inPlik &plik)
+void outPlik::open()
 {
-    plik.plik.open(plik.path);
+    plik.open(path);
 }
 
+void outPlik::close()
+{
+    plik.close();
+}
+inPlik::inPlik(string path)
+{
+    this->path = path;
+    open();
+}
+void inPlik::open()
+{
+
+    plik.open(this->path);
+}
+
+void inPlik::open(string path)
+{
+    this->path = path;
+    open();
+}
 
 //Metod zapisujący tablicę do pliku
 
-void writeFile(new_arr &arr, outPlik &plik)
+void outPlik::save( sheet arr)
 {
     for (int i = 0; i < arr.getRows(); i++)
     {
         for(int j = 0; j < arr.getColums(); j++)
         {
-            plik.plik << arr.showPoint(j, i) << "\t";
+            plik << arr.showPoint(j, i) << "\t";
         }
-        plik.plik << endl;
+        plik << endl;
     }
-    plik.plik << endl;
+
 }
 
 
+void inPlik::close()
+{
+    plik.close();
+}
+
 //Funkcja zwracająca ilość wierszy w pliku
 
-int fileRowsBeta(inPlik &plik)
+int inPlik::getRows1()
 {
 
     char ch;
     int rows = 0;
-    open_in(plik);
-    plik.plik.seekg(plik.plik.beg);
-    while(plik.plik.get(ch))
+    open();
+    plik.seekg(plik.beg);
+    while(plik.get(ch))
         if((ch == 0x0a) || (ch == 0x03) || (ch == 0x00) || (ch == 0x04))
             rows++;
-    plik.plik.clear();
-    plik.plik.seekg(0);
-    plik.plik.close();
+    plik.clear();
+    plik.seekg(0);
+    close();
     return rows;
 }
 
 
 //Funkcja zwracająca ilość kolum w pliku
-int fileColumsBeta(inPlik &plik)
+int inPlik::getColums1()
 {
-
-
     char ch;
-
-    int colums = 1;
-
-    open_in(plik);
-    plik.plik.seekg(plik.plik.beg);
-    while(plik.plik.get(ch) && ch != 0x0A)
+    int colums = 0;
+    open();
+    plik.seekg(plik.beg);
+    while(plik.get(ch) && ch != 0x0A)
         if(ch == 0x09)
             colums++;
 
-    plik.plik.clear();
-    plik.plik.seekg(plik.plik.beg);
-    plik.plik.close();
+    plik.clear();
+    plik.seekg(plik.beg);
+    close();
     return colums;
 }
 
 
 //Funkcla zwracająca ilość kolum w pliku
-int fileColums(inPlik &plik)
+int inPlik::getColums()
 {
-    fileColumsBeta(plik);
-    return fileColumsBeta(plik);
+    getColums1();
+    return getColums1();
 }
 
 //Funkcja zwracająca ilość wierszy w pliku
-int fileRows(inPlik &plik)
+int inPlik::getRows()
 {
 
-    fileColumsBeta(plik);
-    return fileRowsBeta(plik);
+    getColums1();
+    return getRows1();
 }
 
 //Funkcja zwracająca danne konkretnej komurki w tablice z pliku
-int showPointFile(inPlik &plik, const int x, const int y)
+string inPlik::showPoint(const int x, const int y)
 {
-    open_in(plik);
-    plik.plik.seekg(plik.plik.beg);
-    plik.plik.clear();
+    open();
+    plik.seekg(plik.beg);
+    plik.clear();
     char ch;
-    int p = (y - 1) * fileColums(plik) + x - 1;
+    int p = (y - 1) * getColums() + x - 1;
     string val;
 
-    plik.plik.close();
-    open_in(plik);
-    for (int i = 0; (i < p) && plik.plik.get(ch); i+0)
+    close();
+
+    open();
+    for (int i = 0; (i < p) && plik.get(ch); i+0)
     {
         if (ch == 0x09 || ch == 0x0A)
             i++;
@@ -128,36 +139,41 @@ int showPointFile(inPlik &plik, const int x, const int y)
 
     do
     {
-        plik.plik.get(ch);
+        plik.get(ch);
         val += ch;
     }
     while (ch != 0x09 && ch != 0x0A);
 
-    plik.plik.close();
-    return atoi(val.c_str());
+    close();
+    return val;
 
 }
 
 //Metod, który dopasowuję rozmiar tablicy dynamicznej do rozmiaru tablicy w pliku
-void sizeArrFile(new_arr &arr, inPlik &plik)
+void inPlik::goSize(sheet &arr)
 {
-    arr.edit_size(fileRows(plik), fileColums(plik));
+    arr.edit_size(getRows(), getColums());
 }
 
 //Metod, który importuję tablicę z pliku
-void importArr(new_arr &arr, inPlik &plik)
+void inPlik::import(sheet &arr)
 {
-    sizeArrFile(arr, plik);
-    for(int i = 1; i <= arr.getRows(); i++)
+    goSize(arr);
+    for(int i = 1; i < arr.getRows(); i++)
     {
-        for(int j = 1; j <= arr.getColums(); j++)
+        for(int j = 1; j < arr.getColums(); j++)
         {
             //arr.arr_int[i][j] = showPointFile(plik, j+1, i+1);
 
-            arr.write(j, i , showPointFile(plik, j+1, i+1));
+            arr.writePoint(i, j , showPoint(i+1, j+1));
         }
 
     }
 
 
+}
+
+bool inPlik::is()
+{
+    return plik.is_open();
 }

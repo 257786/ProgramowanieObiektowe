@@ -21,6 +21,7 @@ void homePage()
          << "4. Zmiana typu" << endl
          << "5. Zapisać tablicę w pliku" << endl
          << "6. Odczytać tablicę z pliku" << endl
+         << "7. Uzyskanie sumy elementów wierszy lub kolumny" << endl
     << "0. Zakoncz program" << endl;
 }
 
@@ -169,16 +170,15 @@ void typePage(sheet &arr)
 //////////////////////////////////
 //Strona do zapisu tablicy w pliku
 
-void writeFilePage(sheet &arr, outPlik &plik)
+void writeFilePage(sheet &arr)
 {
     string path;
     cout << "Proszę podać nazwę pliku, lub adres: " << endl;
     cin >> path;
-    plik.path = path;
-    open_out(plik);
-    //writeFile(arr, plik);
+    outPlik plik(path);
+    plik.save(arr);
     cout << "Tablica została zaspisana do pliku." << endl;
-    plik.plik.close();
+
 
 }
 
@@ -186,7 +186,7 @@ void writeFilePage(sheet &arr, outPlik &plik)
 
 void statusFilePage(inPlik &plik)
 {
-    if(!plik.plik.is_open())
+    if(!plik.is())
         cout << "Błąd wczytywania pliku. :(" << endl;
     else
         cout << "Plik został otwarty. :)" << endl;
@@ -194,23 +194,115 @@ void statusFilePage(inPlik &plik)
 
 //Strona otwierająca plik
 
-void openFilePage(inPlik &plik, sheet &arr)
+/*void openFilePage(sheet &arr)
 {
     string path;
+    inPlik plik;
     do
     {
-
         cout << "Proszę podać nazwę pliku lub jego adres (Jeśli nie chcesz otwierać plik wpisz 0) : ";
         cin >> path;
-        plik.path = path;
-        open_in(plik);
-        statusFilePage(plik);
+        plik.open(path);
 
     }
-    while (!plik.plik.is_open() && !(path == "0"));
-    plik.plik.close();
+    while (!plik.is() && !(path == "0"));
+    plik.close();
 
-    //importArr(arr, plik);
+    plik.import(arr);
+}
+*/
+void getColumPage(sheet &arr)
+{
+    int nr;
+    cout << "proszę podać nr kolumny: ";
+    cin >> nr;
+    string sum;
+    sum = arr.getColumSum(nr-1);
+    cout << sum <<"\nCzy chciałbyś wypełnić komurkę uzyskanym znaczeniem?\n1.—— TAK:)\t2.—— NIE:(\n";
+    int wybor;
+    cin >> wybor;
+    if(wybor == 1)
+    {
+        int x,y;
+        do
+        {
+            cout << "Proszę podać poziomą współrzędną komórki" << endl;
+            cin >> x;
+            if (x > arr.getColums())
+                cout << "Niema takiej poziomej współrzędnej!!" << endl;
+        }
+        while(x > arr.getColums());
+
+        do
+        {
+            cout << "Proszę podać pionową współrzędną komórki"
+                 << endl;
+            cin >> y;
+            if(y > arr.getRows())
+                cout << "Niema takiej pionowej współrzędnej!!" << endl;
+        }
+        while(y > arr.getRows());
+        arr.writePoint(x,y, sum);
+    }
+
+}
+
+void getRowPage(sheet &arr)
+{
+    int nr;
+    cout << "proszę podać nr wierszu: ";
+    cin >> nr;
+    string sum;
+    sum = arr.getRowSum(nr-1);
+    cout << sum <<"\nCzy chciałbyś wypełnić komurkę uzyskanym znaczeniem?\n1.—— TAK:)\t2.—— NIE:(\n";
+    int wybor;
+    cin >> wybor;
+    if(wybor == 1)
+    {
+        int x, y;
+        do {
+            cout << "Proszę podać poziomą współrzędną komórki" << endl;
+            cin >> x;
+            if (x > arr.getColums())
+                cout << "Niema takiej poziomej współrzędnej!!" << endl;
+        } while (x > arr.getColums());
+
+        do {
+            cout << "Proszę podać pionową współrzędną komórki"
+                 << endl;
+            cin >> y;
+            if (y > arr.getRows())
+                cout << "Niema takiej pionowej współrzędnej!!" << endl;
+        } while (y > arr.getRows());
+        arr.writePoint(x, y, sum);
+    }
+}
+
+void getSumPage(sheet &arr)
+{
+
+    int choice;
+
+    do
+    {
+        cout << "Wyznaczenie sumy elementów:\n\t1. —— Wierszu\n\t2. —— Kolumny\n\t 0. —— Anuluj\n";
+        cin >> choice;
+        switch(choice)
+        {
+            case 1:
+                getRowPage(arr);
+                break;
+            case 2:
+                getColumPage(arr);
+                break;
+            case 0:
+                break;
+            default:
+                cout << "Nie ma takiego polecenia!! 0 - główna strona.\n";
+        }
+    }
+    while(choice > 2 || choice < 0);
+
 }
 
 

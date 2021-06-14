@@ -6,25 +6,20 @@
 //
 
 #include <iostream>
-#include <fstream>
 #include "tablica.h"
 #include "menu.h"
-#include "plik.h"
-#include "colors.h"
 using namespace std;
 int main(/*int argc, const char * argv[]*/)
 {
+
     //Utworzenie tablicy
     sheet arr;
 
 
 
-
-    //Tworzenie plików wyjściowych i wejściowych
-    outPlik plikOut;
-    inPlik plikIn;
-
     //Wykonanie programu
+
+
     while(choice)
     {
         homePage();
@@ -44,10 +39,16 @@ int main(/*int argc, const char * argv[]*/)
                 typePage(arr);
                 break;
             case 5:
-                writeFilePage(arr,  plikOut);
+                writeFilePage(arr);
                 break;
             case 6:
-                openFilePage(plikIn, arr);
+                //openFilePage(arr);
+                break;
+            case 7:
+                getSumPage(arr);
+                break;
+            case 555:
+                arr.fill();
                 break;
             case 0: break;
             default:
@@ -55,7 +56,6 @@ int main(/*int argc, const char * argv[]*/)
                 break;
         }
     }
-
     arr.close();
     return 0;
 }

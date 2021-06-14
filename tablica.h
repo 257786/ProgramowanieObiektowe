@@ -7,7 +7,7 @@
 
 #ifndef tablica_h
 #define tablica_h
-
+#include <vector>
 using namespace std;
 
 class point
@@ -29,10 +29,8 @@ public:
      * Funkcja zwracająca typ komórki
      * @return —— typ komórki
      */
-    int get_type();
+    virtual int get_type() = 0;
 
-protected:
-    int type;
 };
 
 class pointInt: public point
@@ -51,12 +49,18 @@ public:
     void write(string inf) override;
 
     /**
-     * Funkcja zwracająca typ komórki
-     * @return —— typ komórki
+     * Funkcja wyświetlająca treść komórki
+     * @return —— treść
      */
     string read() override;
+    /**
+     * Funkcja która zwraca typ komórki
+     * @return —— typ komórki
+     */
+    int get_type() override;
 private:
     int value;
+    int type;
 };
 
 class pointStr: public point
@@ -79,8 +83,11 @@ public:
      * @return —— typ komórki
      */
     string read() override;
+
+    int get_type() override;
 private:
     string value;
+    int type;
 };
 
 class pointDbl: public point
@@ -103,18 +110,24 @@ public:
      * @return —— typ komórki
      */
     string read() override;
+    int get_type() override;
 private:
     double value;
+    int type;
 };
 
 class sheet
 {
 public:
 
+    /**
+     * Konstruktor, który zazwyczaj tworzy arkusz o rozmiaru 10x10 w typie string
+     */
     sheet()
     {
         open(10, 10, 1);
     }
+
     /**
      * Konstruktor inicjalizacji arkuszu
      * @param new_rows [in] —— Ilość wierszy
@@ -125,6 +138,14 @@ public:
     {
         open(new_rows, new_colums, type);
     }
+
+    /**
+     * Destruktor który usuwa z pamięci wsystkie komórki
+     */
+//    ~sheet()
+//    {
+//        close();
+//    }
 
     /**
      * Metoda inicjalizacji arkuszu
@@ -149,13 +170,7 @@ public:
      */
     void show();
 
-    /**
-     * Metoda kopijująca arkuszy
-     * @param new_sheet [out] —— nowy arkusz
-     * @param rows [in] -— ilość wierszy
-     * @param colums [in] —— ilość kolumny
-     */
-    void move(sheet &new_sheet, const int new_rows, const int new_colums);
+
 
     /**
      * Metoda zmieniająca typ komórki
@@ -163,21 +178,21 @@ public:
      * @param x [in] —— nr kolumnu
      * @param y [in] —— nr wierszu
      */
-    void changePointType(const int type, const int x, const int y);
+    void changePointType(const int type, const int i, const int j);
 
     /**
      * Metoda zmieniająca typ kolumny
      * @param type [in] —— żądany typ kolumny
      * @param x [in] —— nr kolumny
      */
-    void changeColumType(const int type, const int x);
+    void changeColumType(const int type, const int j);
 
     /**
      * Metoda zmieniającą typ wierszy
      * @param type [in] —— żądany typ
      * @param y [in] —— nr wierszu
      */
-    void changeRowType(const int type, const int y);
+    void changeRowType(const int type, const int i);
 
     /**
      * Metoda zmieniająca typ arkuszu
@@ -245,14 +260,61 @@ public:
      */
     int getRows();
 
+    /**
+     * Funkcja zwracająca wskaźnik elementu;
+     * @return wskaźnik komórki;
+     */
+    point*** getArr();
+
+    /**
+     * Funkcja zwracająca typ komórki:
+     * @param i —— nr wierszu;
+     * @param j —— nr kolumny;
+     * @return —— typ komórki;
+     */
+    int getPointType(const int i, const int j);
+
+    /**
+     * Metoda kopijująca dane z jednego arkuszu do drugiego
+     * @param new_arr —— nowy arkusz
+     * @param p —— wskaźnik na komórkę pierwszego arkuszu
+     * @param i —— nr wierszu
+     * @param j —— nr kolumny
+     */
+    void copy(sheet &new_arr, point* p, const int i, const int j);
+
+    /**
+     * Metoda losowo wypełniająca arkusz;
+     */
+    void fill();
+
+    /**
+     * Funkcja zwracająca sumę komórek wierszu
+     * @param i —— nr wierszu
+     * @return —— suma komórek
+     */
+    string getRowSum(int i);
+
+    /**
+     * Funkcja zwracająca sumę komórek kolumny
+     * @param j —— nr kolumny
+     * @return —— suma komórek
+     */
+    string getColumSum(int j);
+
+
 private:
 
     int rows;
     int colums;
     point ***arr;
+
+
 };
 
 
+
+//////////////////////////////////////////////
 
 class new_arr
 {
@@ -359,6 +421,7 @@ private:
 
 
 };
+
 
 
 #endif /* tablica_h */

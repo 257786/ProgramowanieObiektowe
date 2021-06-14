@@ -14,7 +14,9 @@ using namespace std;
 
 int choice = 10;
 
-//Główna strona
+/**
+ * Główna strona
+ * /
 void homePage();
 
 
@@ -72,7 +74,7 @@ void typePage(sheet &arr);
  * @param[in,out] arr - tablica dwuwymiarowa
  * @param[out] - plik wyjśćiowy
  */
-void writeFilePage(sheet &arr, outPlik &plik);
+void writeFilePage(sheet &arr);
 
 
 /**
@@ -87,9 +89,25 @@ void statusFilePage(inPlik &plik);
  * @param plik[in] - plik wejściowy
  * @param arr [in, out] - tablica dwuwymiarowa
  */
-void openFilePage(inPlik &plik, sheet &arr);
+//void openFilePage(sheet &arr);
 
+/**
+ * Strona menu wyznaczjąca sumę kolum
+ * @param arr —— tablica dwuwymiarowa
+ */
+void getColumPage(sheet &arr);
 
+/**
+ * Strona menu wyznaczająca sumę wierszy
+ * @param arr —— tablica dwuwymiarowa
+ */
+void getRowPage(sheet &arr);
+
+/**
+ * Strona wyznaczająca sumę elementów wierszu lub kolumny
+ * @param arr —— tablica dwuwymiarowa;
+ */
+void getSumPage(sheet &arr);
 
 
 #endif /* menu_h */

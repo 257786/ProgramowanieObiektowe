@@ -12,15 +12,17 @@
 using namespace std;
 
 
-int point::get_type()
-{
-    return type;
-}
+
 void pointInt::write(string inf)
 {
     stringstream str;
     str << inf;
     str >> value;
+}
+
+int pointInt::get_type()
+{
+    return type;
 }
 
 void pointDbl::write(string inf)
@@ -30,9 +32,19 @@ void pointDbl::write(string inf)
     str >> value;
 }
 
+int pointDbl::get_type()
+{
+    return type;
+}
+
 void pointStr::write(string inf)
 {
     value = inf;
+}
+
+int pointStr::get_type()
+{
+    return type;
 }
 string pointInt::read()
 {
@@ -70,10 +82,10 @@ void sheet::open(const int rows, const int colums, const char type)
 {
     this->rows = rows;
     this->colums = colums;
-    arr = new point**[rows];
+    arr = new point**[this->rows];
     for(int i = 0; i < rows; i++)
     {
-        arr[i] = new point*[colums];
+        arr[i] = new point*[this->colums];
         for(int j = 0; j < colums; j++)
         {
             switch (type)
@@ -94,6 +106,14 @@ void sheet::open(const int rows, const int colums, const char type)
 
 void sheet::close()
 {
+    for (int i = 0; i < rows; i++)
+    {
+        for (int j = 0; j < colums; j++)
+        {
+            delete arr[i][j];
+        }
+    }
+
     for(int i = 0; i < rows; i++)
     {
         delete[] arr[i];
@@ -128,36 +148,36 @@ void sheet::show()
 
 
 
-void sheet::changePointType(const int type, const int x, const int y)
+void sheet::changePointType(const int type, const int i, const int j)
 {
-    delete[] arr[y][x];
+    delete arr[i][j];
     switch (type)
     {
         case 0:
-            arr[y][x] = new pointInt;
+            arr[i][j] = new pointInt;
             break;
         case 1:
-            arr[y][x] = new pointStr;
+            arr[i][j] = new pointStr;
             break;
         case 2:
-            arr[y][x] = new pointDbl;
+            arr[i][j] = new pointDbl;
             break;
     }
 }
 
-void sheet::changeColumType(const int type, const int x)
+void sheet::changeColumType(const int type, const int j)
 {
-    for(int y = 0; y < getRows(); y++)
+    for(int i = 0; i < getRows(); i++)
     {
-        changePointType(type, x, y);
+        changePointType(type, i, j);
     }
 }
 
-void sheet::changeRowType(const int type, const int y)
+void sheet::changeRowType(const int type, const int i)
 {
-    for(int x = 0; x < getColums(); x++)
+    for(int j = 0; j < getColums(); j++)
     {
-        changePointType(type, x, y);
+        changePointType(type, i, j);
     }
 }
 
@@ -173,88 +193,86 @@ void sheet::change_type(const int type)
 }
 
 
-void sheet::move(sheet &new_sheet, const int new_rows, const int new_colums)
-{
-
-    for(int i = 0; i < new_rows; i++)
-        for(int j = 0; i < new_colums; j++)
-            new_sheet.writePoint(j+1, i+1, showPoint(j, i));
-
-
-   /* for(int i = 0; i < new_rows; i++)
-        for(int j = 0; j < new_colums; j++)
-            new_sheet.arr[i][j] = arr[i][j];*/
-    close();
-    for (int i = 0; i < rows; i++)
-        arr[i] = new_sheet.arr[i];
-
-    arr = new_sheet.arr;
-    rows = new_rows;
-    colums = new_colums;
-}
-
-
-void sheet::lessx(const int new_colums)
-{
-    //  Ініціалізуємо додаткову таблицю
-
-    sheet new_sheet;
-    new_sheet.open(rows, new_colums, 1);
-    //Переносимо дані зі старої таблиці на нову
-    move(new_sheet, rows, new_colums);
-
-}
-
-void sheet::lessy(const int new_rows)
-{
-    //  Ініціалізуємо додаткову таблицю
-
-    sheet new_sheet;
-    new_sheet.open(new_rows, colums, 1);
-    move(new_sheet, new_rows, colums);
-
-}
-
-
 void sheet::morex(const int new_colums)
 {
-
-    //  Ініціалізуємо додаткову таблицю
-
-    sheet new_sheet;
-    new_sheet.open(rows, new_colums, 1);
-    move(new_sheet, rows, colums);
-
-
+    sheet new_arr(rows, new_colums, 1);
+    for(int i = 0; i < rows; i++)
+    {
+        for(int j = 0; j < colums; j++)
+        {
+            copy(new_arr, arr[i][j], i, j);
+        }
+    }
+    close();
+    arr = new_arr.getArr();
+    colums = new_colums;
 }
 
 void sheet::morey(const int new_rows)
 {
+    sheet new_arr(new_rows, colums, 1);
+    for(int i = 0; i < rows; i++)
+    {
+        for(int j = 0; j < colums; j++)
+        {
+            copy(new_arr, arr[i][j], i, j);
+        }
+    }
+    close();
 
-    sheet new_sheet;
-    new_sheet.open(new_rows, colums, 1);
-    //Переносимо дані зі старої таблиці на нову
-    move(new_sheet, rows, colums);
+    arr = new_arr.getArr();
+    rows = new_rows;
 
 }
 
-void sheet::edit_size(const int new_rows, const int new_colums)
+void sheet::lessx(const int new_colums)
 {
+    sheet new_arr(rows, new_colums, 1);
+    for(int i = 0; i < rows; i++)
+    {
+        for(int j = 0; j < new_colums; j++)
+        {
+            copy(new_arr, arr[i][j], i, j);
+        }
+    }
+    close();
+    arr = new_arr.getArr();
+    colums = new_colums;
+}
+void sheet::lessy(const int new_rows)
+{
+    sheet new_arr(new_rows, colums, 1);
+    for(int i = 0; i < new_rows; i++)
+    {
+        for(int j = 0; j < colums; j++)
+        {
+            copy(new_arr, arr[i][j], i, j);
+        }
+    }
+    close();
+    arr = new_arr.getArr();
+    rows = new_rows;
+}
+void sheet::edit_size(const int new_rows, const int new_colums) {
     if (new_rows <= rows)
         lessy(new_rows);
     else
+    {
         morey(new_rows);
+
+    }
 
     if (new_colums <= colums)
         lessx(new_colums);
     else
         morex(new_colums);
+
+
 }
 
-
-void sheet::writePoint(const int x, const int y,const string value)
+void sheet::writePoint(const int i, const int j,const string value)
 {
-    arr[y-1][x-1]->write(value);
+    arr[i][j]->write(value);
 }
 
 //Funkcja, która wyświetla znaczenie komórki
@@ -271,6 +289,77 @@ int sheet::getRows()
 {
     return rows;
 }
+
+int sheet::getPointType(const int i, const int j)
+{
+    return arr[i][j]->get_type();
+}
+point*** sheet::getArr()
+{
+    return arr;
+}
+void sheet::copy(sheet &new_arr, point* p, const int i, const int j)
+{
+    new_arr.changePointType(p->get_type(), i, j);
+    new_arr.writePoint(i, j, p->read());
+
+}
+
+
+void sheet::fill()
+{
+    for(int i = 0; i < rows; i++)
+    {
+        for(int j = 0; j < colums; j++)
+        {
+            changePointType(rand() % 3, i, j );
+            stringstream s;
+            s << rand() % 100;
+            string s2;
+            s >> s2;
+            writePoint(i, j, s2);
+        }
+
+    }
+
+}
+
+string sheet::getRowSum(int i)
+{
+    double sum = 0;
+    for(int j = 0; j < colums; j++)
+    {
+        stringstream p;
+        double val;
+        p << arr[i][j]->read();
+        p >> val;
+        sum += val;
+    }
+    stringstream p;
+    string ssum;
+    p << sum;
+    p >> ssum;
+    return ssum;
+}
+
+string sheet::getColumSum(int j)
+{
+    double sum = 0;
+    for(int i = 0; i < rows; i++)
+    {
+        stringstream p;
+        double val;
+        p << arr[i][j]->read();
+        p >> val;
+        sum += val;
+    }
+    stringstream p;
+    string ssum;
+    p << sum;
+    p >> ssum;
+    return ssum;
+}
+
 ///////////////////////////////////////////////////////////////////////////
 
 
@@ -303,7 +392,7 @@ void new_arr::close()
     delete[] arr_int;
 }
 
-// Metod, który wypęwnia tablicę losowymi liczbami
+//Metod, który wypęwnia tablicę losowymi liczbami
 void new_arr::fill()
 {
     for (int i = 0; i < rows; i++)
@@ -398,8 +487,7 @@ void new_arr::morex(const int new_colums)
     //Очищуємо першу таблицю
     close();
     
-    for (int i = 0; i < rows; i++)
-        arr_int[i] = new_arr.arr_int[i];
+
     arr_int = new_arr.arr_int;
     
     
@@ -424,8 +512,7 @@ void new_arr::morey(const int new_rows)
     //Очищуємо першу таблицю
     close();
     
-    for (int i = 0; i < rows; i++)
-        arr_int[i] = new_arr.arr_int[i];
+
     arr_int = new_arr.arr_int;
     
     rows = new_rows;
@@ -438,7 +525,10 @@ void new_arr::edit_size(const int new_rows, const int new_colums)
     if (new_rows <= rows)
         lessy(new_rows);
     else
+    {
         morey(new_rows);
+
+    }
     if (new_colums <= colums)
         lessx(new_colums);
     else
