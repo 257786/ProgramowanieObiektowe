@@ -168,7 +168,9 @@ public:
     /**
      * Metoda wyświetlająca arkusz
      */
-    void show();
+
+
+    point* getPoint(const int i, const int j);
 
 
 
@@ -266,6 +268,8 @@ public:
      */
     point*** getArr();
 
+
+
     /**
      * Funkcja zwracająca typ komórki:
      * @param i —— nr wierszu;
@@ -293,23 +297,68 @@ public:
      * @param i —— nr wierszu
      * @return —— suma komórek
      */
-    string getRowSum(int i);
+    string getRowSum(const int i);
 
     /**
      * Funkcja zwracająca sumę komórek kolumny
      * @param j —— nr kolumny
      * @return —— suma komórek
      */
-    string getColumSum(int j);
+    string getColumSum(const int j);
 
+    /**
+     * odzyskiwanie imienia arkuszu
+     * @return imię
+     */
+    string getName();
+
+    /**
+     * nadanie imienia arkuszu
+     * @param name [in] —— nowe imię.
+     */
+    void setName(const string name);
 
 private:
 
     int rows;
     int colums;
-    point ***arr;
+    point*** arr;
+    string name;
 
 
+};
+
+
+class arkuszy
+{
+private:
+    int size;
+public:
+    /**
+     * Konstruktor
+     */
+    arkuszy();
+
+    /**
+     * dodawanie arkuszu
+     */
+    void add();
+    /**
+     * usuwanie arkuszu
+     * @param nr (numer arkuszu, który chcemy usunąć)
+     */
+    void del(const int nr);
+
+    /**
+     * Uzyskiwanie rozmiaru
+     * @return rozmiar tablicy arkuszów
+     */
+    int getSize();
+    sheet* arr;
+
+    int current;
+
+    void close();
 };
 
 
@@ -424,5 +473,5 @@ private:
 
 
 
-#endif /* tablica_h */
 
+#endif /* tablica_h */

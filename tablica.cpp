@@ -8,7 +8,7 @@
 #include <iostream>
 #include <sstream>
 #include "tablica.h"
-#include "colors.h"
+
 using namespace std;
 
 
@@ -74,12 +74,13 @@ void sheet::zero()
 
     for(int i = 0; i < rows; i++)
         for(int j = 0; j < colums; j++)
-           arr[i][j]->write("0");
+            arr[i][j]->write("0");
 
 }
 
 void sheet::open(const int rows, const int colums, const char type)
 {
+    name = "Nowy arkusz";
     this->rows = rows;
     this->colums = colums;
     arr = new point**[this->rows];
@@ -122,30 +123,12 @@ void sheet::close()
 }
 
 
-void sheet::show()
+
+
+point* sheet::getPoint(const int i, const int j)
 {
-    cout << endl;
-    for (int i = 0; i < rows; i++)
-    {
-        for(int j = 0; j < colums; j++)
-        {
-            switch(arr[i][j]->get_type())
-            {
-                case 0:
-                    cout << green << arr[i][j]->read() << reset << "\t";
-                    break;
-                case 1:
-                    cout << magenta << arr[i][j]->read() << reset << "\t";
-                    break;
-                case 2:
-                    cout << cyan << arr[i][j]->read() << reset << "\t";
-            }
-
-        }
-        cout << endl;
-    }
+    return arr[i][j];
 }
-
 
 
 void sheet::changePointType(const int type, const int i, const int j)
@@ -324,7 +307,7 @@ void sheet::fill()
 
 }
 
-string sheet::getRowSum(int i)
+string sheet::getRowSum(const int i)
 {
     double sum = 0;
     for(int j = 0; j < colums; j++)
@@ -342,7 +325,7 @@ string sheet::getRowSum(int i)
     return ssum;
 }
 
-string sheet::getColumSum(int j)
+string sheet::getColumSum(const int j)
 {
     double sum = 0;
     for(int i = 0; i < rows; i++)
@@ -360,6 +343,73 @@ string sheet::getColumSum(int j)
     return ssum;
 }
 
+string sheet::getName()
+{
+    return name;
+}
+
+void sheet::setName(const string name)
+{
+    this->name = name;
+}
+
+void pushback(sheet* arr)
+{
+    sheet* new_arr = new sheet[sizeof(arr)+1];
+
+}
+
+arkuszy::arkuszy()
+{
+    size = 1;
+    arr = new sheet[1];
+}
+
+void arkuszy::add()
+{
+
+    sheet* new_sheet = new sheet[size+1];
+    for(int i = 0; i < size; i++)
+        new_sheet[i] = arr[i];
+    delete[] arr;
+    arr = new_sheet;
+    size++;
+
+}
+
+void arkuszy::del(const int nr)
+{
+    if (nr<=size)
+    {
+        size--;
+        sheet* new_sheet = new sheet[size];
+        for(int i = 0; i < size;i++)
+        {
+            if(i < nr)
+            {
+                new_sheet[i] = arr[i];
+            }
+            else
+            {
+                new_sheet[i] = arr[i+1];
+            }
+        }
+        delete[] arr;
+        arr = new_sheet;
+    }
+}
+
+int arkuszy::getSize()
+{
+    return size;
+}
+
+
+
+void arkuszy::close()
+{
+    delete[] arr;
+}
 ///////////////////////////////////////////////////////////////////////////
 
 
@@ -428,16 +478,16 @@ void new_arr::lessx(const int new_colums)
     for (int i = 0; i < rows; i++)
         for (int j = 0; j < new_colums; j++)
             new_arr.arr_int[i][j] = arr_int[i][j];
-    
-    
-        //Очищуємо першу таблицю
+
+
+    //Очищуємо першу таблицю
 
     close();
 
     for (int i = 0; i < rows; i++)
         arr_int[i] = new_arr.arr_int[i];
     arr_int = new_arr.arr_int;
-    
+
     colums = new_colums;
 }
 
@@ -454,7 +504,7 @@ void new_arr::lessy(const int new_rows)
     for (int i = 0; i < new_rows; i++)
         for (int j = 0; j < colums; j++)
             new_arr.arr_int[i][j] = arr_int[i][j];
-    
+
     //Очищуємо першу таблицю
 
     close();
@@ -462,7 +512,7 @@ void new_arr::lessy(const int new_rows)
     for (int i = 0; i < new_rows; i++)
         arr_int[i] = new_arr.arr_int[i];
     arr_int = new_arr.arr_int;
-    
+
     rows = new_rows;
 }
 
@@ -472,7 +522,7 @@ void new_arr::lessy(const int new_rows)
 //Metod, który zwiększa ilość kolum
 void new_arr::morex(const int new_colums)
 {
-    
+
     //  Ініціалізуємо додаткову таблицю
 
     new_arr new_arr;
@@ -483,18 +533,20 @@ void new_arr::morex(const int new_colums)
             new_arr.arr_int[i][j] = arr_int[i][j];
     //Обнуляємо новостворенні комірки
 
-    
+
     //Очищуємо першу таблицю
     close();
-    
+
 
     arr_int = new_arr.arr_int;
-    
-    
+
+
     colums = new_colums;
-    
-    
+
+
 }
+
+
 //-----
 
 //Функція збільшення по осі y
@@ -511,10 +563,10 @@ void new_arr::morey(const int new_rows)
 
     //Очищуємо першу таблицю
     close();
-    
+
 
     arr_int = new_arr.arr_int;
-    
+
     rows = new_rows;
 }
 
@@ -558,5 +610,3 @@ int new_arr::getRows()
 {
     return rows;
 }
-
-

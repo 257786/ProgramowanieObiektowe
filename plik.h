@@ -65,6 +65,7 @@ public:
      * konstruktor inicjalizujący plik wejściowy
      */
     inPlik();
+
     /**
      * konstruktor inicjalizujący plik wejściowy
      * @param path [in] —— adres lub nazwa pliku

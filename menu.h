@@ -12,12 +12,14 @@
 #include "tablica.h"
 using namespace std;
 
-int choice = 10;
 
+
+
+void show(sheet &arr);
 /**
- * Główna strona
- * /
-void homePage();
+ * Głowna strona
+ */
+void homePage(arkuszy arr);
 
 
 /**
@@ -89,7 +91,7 @@ void statusFilePage(inPlik &plik);
  * @param plik[in] - plik wejściowy
  * @param arr [in, out] - tablica dwuwymiarowa
  */
-//void openFilePage(sheet &arr);
+void openFilePage(sheet &arr);
 
 /**
  * Strona menu wyznaczjąca sumę kolum
@@ -108,6 +110,17 @@ void getRowPage(sheet &arr);
  * @param arr —— tablica dwuwymiarowa;
  */
 void getSumPage(sheet &arr);
+
+void showArkuszy(arkuszy arr);
+
+void setArkusz(arkuszy arr);
+
+void delPage(arkuszy arr);
+
+void newPage(arkuszy arr);
+
+void changeName(arkuszy arr);
+
 
 
 #endif /* menu_h */

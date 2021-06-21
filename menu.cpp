@@ -9,12 +9,41 @@
 #include <fstream>
 #include "tablica.h"
 #include "plik.h"
+#include "colors.h"
+#include "menu.h"
 using namespace std;
 
 
-//Główna strona
-void homePage()
+
+void show(sheet &arr)
 {
+    cout << endl;
+    for (int i = 0; i < arr.getRows(); i++)
+    {
+        for(int j = 0; j < arr.getColums(); j++)
+        {
+            switch(arr.getPointType(i,j))
+            {
+                case 0:
+                    cout << green << arr.getPoint(i,j)->read() << reset << "\t";
+                    break;
+                case 1:
+                    cout << magenta << arr.getPoint(i,j)->read() << reset << "\t";
+                    break;
+                case 2:
+                    cout << cyan << arr.getPoint(i,j)->read() << reset << "\t";
+            }
+
+        }
+        cout << endl;
+    }
+}
+
+
+//Główna strona
+void homePage(arkuszy arr)
+{
+    cout << "Arkusz:\t" << green << arr.current << "\t" <<cyan << arr.arr[arr.current].getName() << reset << endl;
     cout << "1. Wyświetlić tablicę" << endl
          << "2. Zmienić rozmiar tablicy" << endl
          << "3. Wypełnić komurkę" << endl
@@ -22,9 +51,60 @@ void homePage()
          << "5. Zapisać tablicę w pliku" << endl
          << "6. Odczytać tablicę z pliku" << endl
          << "7. Uzyskanie sumy elementów wierszy lub kolumny" << endl
+         << "8. Wybrać arkusz\n"
+         << "9. Usuń arkusz\n"
+         << "10. Zmiana nazwy arkuszu\n"
     << "0. Zakoncz program" << endl;
 }
 
+void showArkuszy(arkuszy arr)
+{
+    for(int i = 0; i < arr.getSize(); i++)
+    {
+        cout << i <<":\t"<< green << arr.arr[i].getName() << reset <<endl;
+    }
+}
+
+void setArkusz(arkuszy arr)
+{
+    cout << "Wybierz arkusz:\n";
+    cin >> arr.current;
+}
+
+void delPage(arkuszy arr)
+{
+    cout << "Czy na pewno chcesz usunąć ten arkusz? (t/n):";
+    string w;
+    cin >> w;
+    if(w == "t")
+        arr.del(arr.current);
+}
+
+
+void newPage(arkuszy arr)
+{
+    cout << "Czy chcesz utworzyć nowy arkusz? (t/n):";
+    string w;
+    cin >> w;
+    if(w == "t")
+    {
+        arr.add();
+        cout << "Proszę podać nazwę arkuszu:\n";
+        string name;
+        cin >> name;
+        arr.arr[arr.current].setName(name);
+        showArkuszy(arr);
+    }
+
+}
+
+void changeName(arkuszy arr)
+{
+    cout << "Proszę podać nazwę arkuszu:\n";
+    string name;
+    cin >> name;
+    arr.arr[arr.current].setName(name);
+}
 //Strona do zmiany rozmiaru tablicy
 
 
@@ -194,10 +274,10 @@ void statusFilePage(inPlik &plik)
 
 //Strona otwierająca plik
 
-/*void openFilePage(sheet &arr)
+void openFilePage(sheet &arr)
 {
     string path;
-    inPlik plik;
+    inPlik plik("h");
     do
     {
         cout << "Proszę podać nazwę pliku lub jego adres (Jeśli nie chcesz otwierać plik wpisz 0) : ";
@@ -210,7 +290,7 @@ void statusFilePage(inPlik &plik)
 
     plik.import(arr);
 }
-*/
+
 void getColumPage(sheet &arr)
 {
     int nr;

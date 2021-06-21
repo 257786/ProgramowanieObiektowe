@@ -5,15 +5,27 @@
 //  Created by yaroslav on 30/04/2021.
 //
 
+#define this_arr _arr.arr[_arr.current]
 #include <iostream>
 #include "tablica.h"
 #include "menu.h"
 using namespace std;
-int main(/*int argc, const char * argv[]*/)
+
+
+int main1()
+{
+    inPlik plik("plik.txt");
+    cout<< plik.getColums()<< endl;
+    cout << plik.showPoint(9,1)<<"k\n";
+    return 0;
+}
+int main(int argc, const char * argv[])
 {
 
+    arkuszy _arr;
+    int choice = 10;
     //Utworzenie tablicy
-    sheet arr;
+
 
 
 
@@ -22,33 +34,44 @@ int main(/*int argc, const char * argv[]*/)
 
     while(choice)
     {
-        homePage();
+        homePage(_arr);
         cin >> choice;
 
         switch (choice) {
             case 1:
-                arr.show();
+                show(this_arr);
                 break;
             case 2:
-                sizePage(arr);
+                sizePage(this_arr);
                 break;
             case 3:
-                writePage(arr);
+                writePage(this_arr);
                 break;
             case 4:
-                typePage(arr);
+                typePage(this_arr);
                 break;
             case 5:
-                writeFilePage(arr);
+                writeFilePage(this_arr);
                 break;
             case 6:
-                //openFilePage(arr);
+                openFilePage(this_arr);
                 break;
             case 7:
-                getSumPage(arr);
+                getSumPage(this_arr);
+                break;
+            case 8:
+                showArkuszy(_arr);
+                newPage(_arr);
+                setArkusz(_arr);
+                break;
+            case 9:
+                delPage(_arr);
+                break;
+            case 10:
+                changeName(_arr);
                 break;
             case 555:
-                arr.fill();
+                this_arr.fill();
                 break;
             case 0: break;
             default:
@@ -56,6 +79,7 @@ int main(/*int argc, const char * argv[]*/)
                 break;
         }
     }
-    arr.close();
+    _arr.close();
     return 0;
 }
+

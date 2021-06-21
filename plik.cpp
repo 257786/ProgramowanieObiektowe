@@ -107,7 +107,7 @@ int inPlik::getColums1()
 int inPlik::getColums()
 {
     getColums1();
-    return getColums1();
+    return getColums1()+1;
 }
 
 //Funkcja zwracająca ilość wierszy w pliku
@@ -140,7 +140,8 @@ string inPlik::showPoint(const int x, const int y)
     do
     {
         plik.get(ch);
-        val += ch;
+        if(ch != 0x09 && ch != 0x0A)
+            val += ch;
     }
     while (ch != 0x09 && ch != 0x0A);
 
@@ -159,18 +160,13 @@ void inPlik::goSize(sheet &arr)
 void inPlik::import(sheet &arr)
 {
     goSize(arr);
-    for(int i = 1; i < arr.getRows(); i++)
+    for(int i = 0; i < arr.getRows(); i++)
     {
-        for(int j = 1; j < arr.getColums(); j++)
+        for(int j = 0; j < arr.getColums(); j++)
         {
-            //arr.arr_int[i][j] = showPointFile(plik, j+1, i+1);
-
-            arr.writePoint(i, j , showPoint(i+1, j+1));
+            arr.writePoint(i, j , showPoint(j+1, i+1));
         }
-
     }
-
-
 }
 
 bool inPlik::is()
